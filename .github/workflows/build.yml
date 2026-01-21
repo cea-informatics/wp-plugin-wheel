@@ -112,10 +112,8 @@ jobs:
                   asset="${{ needs.zip-plugin.outputs.zip_path }}"
 
                   if gh release view "v$version" &>/dev/null; then
-                  echo "Release v$version déjà existante → upload asset"
                   gh release upload "v$version" "$asset" --clobber
                   else
-                  echo "Création de la release v$version"
                   gh release create "v$version" \
                       --title "v$version" \
                       --notes-file notes.md \
