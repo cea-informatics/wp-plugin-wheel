@@ -48,7 +48,7 @@ jobs:
               id: zip
               run: |
                   zip_name="plugin-${{ needs.get-version.outputs.version }}.zip"
-                  zip -r "$zip_name" "$PLUGIN_DIR"
+                  zip -r "$zip_name" "." -x ".git/*" ".github/*" "*.zip"
                   echo "zip_path=$zip_name" >> $GITHUB_OUTPUT
 
     create-release:
