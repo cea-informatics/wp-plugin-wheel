@@ -46,11 +46,11 @@ jobs:
 
             - name: Create ZIP archive
               id: zip
-              shell: bash
               run: |
                   zip_name="wp-plugin-wheel.zip"
-                  mkdir -p build/wp-plugin-wheel  # Crée le dossier parent avant de copier
-                  cp -r * build/wp-plugin-wheel/  # Copie tout dedans
+                  mkdir -p build/wp-plugin-wheel
+                  shopt -s extglob
+                  cp -r !(build) build/wp-plugin-wheel/
                   cd build
                   zip -r "$zip_name" wp-plugin-wheel -x "wp-plugin-wheel/.git/*" "wp-plugin-wheel/.github/*" "*.zip"
                   echo "zip_path=$zip_name" >> $GITHUB_OUTPUT
