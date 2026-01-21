@@ -11,6 +11,7 @@
  *
  * @package         wp-plugin-wheel
  */
+
 if (!defined('ABSPATH')) exit;
 
 function wpw_display_wheel() {
