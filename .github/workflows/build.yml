@@ -76,13 +76,17 @@ jobs:
                   last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
                   log_range="${last_tag:+${last_tag}..}HEAD"
 
-                  # Helper function to add sections
                   section() {
                     local title="$1" pattern="$2"
+                    local repo="${GITHUB_REPOSITORY}"
                     if git log $log_range --oneline | grep -qiE "$pattern"; then
-                      printf "### %s\n" "$title"
-                      git log $log_range --oneline | grep -iE "$pattern" | sed 's/^/- /'
-                      printf "\n"
+                        printf "### %s\n" "$title"
+                        git log $log_range --oneline | grep -iE "$pattern" | while read -r line; do
+                        hash=$(echo "$line" | awk '{print $1}')
+                        msg=$(echo "$line" | cut -d' ' -f2-)
+                        echo "- [\`${hash}\`](https://github.com/$repo/commit/$hash) $msg"
+                        done
+                        printf "\n"
                     fi
                   }
 
