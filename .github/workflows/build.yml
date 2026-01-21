@@ -46,7 +46,7 @@ jobs:
 
             - name: Create ZIP archive
               id: zip
-              shell: /usr/bin/bash
+              shell: bash
               run: |
                   zip_name="wp-plugin-wheel.zip"
                   mkdir -p build/wp-plugin-wheel  # Crée le dossier parent avant de copier
