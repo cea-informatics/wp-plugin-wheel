@@ -51,7 +51,7 @@ jobs:
                   zip -r "$zip_name" . -x ".git/*" ".github/*" "*.zip"
                   echo "zip_path=$zip_name" >> $GITHUB_OUTPUT
             - name: Upload artifact
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: plugin-zip
                   path: ${{ steps.zip.outputs.zip_path }}
@@ -113,7 +113,7 @@ jobs:
                   } > notes.md
 
             - name: Download plugin ZIP
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v4
               with:
                   name: plugin-zip
                   path: .
