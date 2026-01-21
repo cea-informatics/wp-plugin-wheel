@@ -47,7 +47,8 @@ jobs:
             - name: Create ZIP archive
               id: zip
               run: |
-                  zip -r wp-plugin-wheel.zip . -x ".git/*" ".github/*" "*.zip"
+                  zip_name="wp-plugin-wheel.zip"
+                  zip -r "$zip_name" . -x ".git/*" ".github/*" "*.zip"
                   echo "zip_path=$zip_name" >> $GITHUB_OUTPUT
 
     create-release:
