@@ -49,7 +49,12 @@ jobs:
               run: |
                   zip_name="wp-plugin-wheel.zip"
                   zip -r "$zip_name" . -x ".git/*" ".github/*" "*.zip"
-                  echo "zip_path=$(pwd)/$zip_name" >> $GITHUB_OUTPUT
+                  echo "zip_path=$zip_name" >> $GITHUB_OUTPUT
+            - name: Upload artifact
+              uses: actions/upload-artifact@v3
+              with:
+                  name: plugin-zip
+                  path: ${{ steps.zip.outputs.zip_path }}
 
     create-release:
         name: Create GitHub Release
@@ -106,6 +111,12 @@ jobs:
                       printf "\n"
                     fi
                   } > notes.md
+
+            - name: Download plugin ZIP
+              uses: actions/download-artifact@v3
+              with:
+                  name: plugin-zip
+                  path: .
 
             - name: Create or Update Release
               run: |
