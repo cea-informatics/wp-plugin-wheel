@@ -1,0 +1,14 @@
+#wp-wheel {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 5px solid #333;
+    margin-bottom: 10px;
+    background: conic-gradient(#ff4d4d 0 60deg,
+            #4dff4d 60deg 120deg,
+            #4d4dff 120deg 180deg,
+            #ffff4d 180deg 240deg,
+            #ff4dff 240deg 300deg,
+            #4dffff 300deg 360deg);
+    transition: transform 4s ease-out;
+}
