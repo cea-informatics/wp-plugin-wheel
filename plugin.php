@@ -2,8 +2,8 @@
 
 /**
  * Plugin Name:     Custom Wheel
- * Description:     WordPress plugin to display a spinning wheel.
- * Version:         1.0.4
+ * Description:     The plugin adds an interactive spinning wheel.
+ * Version:         1.0.5
  * Author:          CEA Informatics
  * License:         GPL-2.0-or-later
  * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
