@@ -3,11 +3,11 @@
 /**
  * Plugin Name:     wp-plugin-wheel
  * Description:     WordPress plugin to display a spinning wheel.
- * Version:         1.0.2
+ * Version:         1.0.3
  * Author:          CEA Informatics
  * License:         GPL-2.0-or-later
  * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:     wp-plugin-wheel
+ * Text Domain:     Wheel
  *
  * @package         wp-plugin-wheel
  */
