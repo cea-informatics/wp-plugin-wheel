@@ -15,7 +15,7 @@ jobs:
             version: ${{ steps.version.outputs.version }}
             needed: ${{ steps.version.outputs.needed }}
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
 
             - name: Extract version from PHP header
               id: version
@@ -42,14 +42,14 @@ jobs:
         outputs:
             zip_path: ${{ steps.zip.outputs.zip_path }}
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
 
             - name: Create ZIP archive
               id: zip
               run: |
                   zip_name="wp-plugin-wheel.zip"
                   mkdir -p build/wp-plugin-wheel
-                  cp -r assets build/wp-plugin-wheel/ && cp plugin.php build/wp-plugin-wheel/
+                  cp -r assets build/wp-plugin-wheel/; cp plugin.php build/wp-plugin-wheel/
                   (cd build && zip -r "../$zip_name" wp-plugin-wheel)
                   echo "zip_path=$zip_name" >> $GITHUB_OUTPUT
               shell: bash
@@ -68,7 +68,7 @@ jobs:
         permissions:
             contents: write
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
               with:
                   fetch-depth: 0
 
