@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Plugin Name:     wp-plugin-wheel
+ * Plugin Name:     Custom Wheel
  * Description:     WordPress plugin to display a spinning wheel.
- * Version:         1.0.3
+ * Version:         1.0.4
  * Author:          CEA Informatics
  * License:         GPL-2.0-or-later
  * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:     Wheel
+ * Text Domain:     wp-plugin-wheel
  *
  * @package         wp-plugin-wheel
  */
