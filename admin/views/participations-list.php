@@ -1,0 +1,51 @@
+<?php if (!defined('ABSPATH')) exit; ?>
+
+<div class="wrap">
+    <h1><?php esc_html_e('Participations', 'wp-plugin-wheel'); ?></h1>
+
+    <table class="wp-list-table widefat striped">
+        <thead>
+            <tr>
+                <th><?php esc_html_e('ID', 'wp-plugin-wheel'); ?></th>
+                <th><?php esc_html_e('User', 'wp-plugin-wheel'); ?></th>
+                <th><?php esc_html_e('Prize Won', 'wp-plugin-wheel'); ?></th>
+                <th><?php esc_html_e('Date', 'wp-plugin-wheel'); ?></th>
+                <th><?php esc_html_e('Time', 'wp-plugin-wheel'); ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (empty($participations)): ?>
+                <tr>
+                    <td colspan="5"><?php esc_html_e('No participations found.', 'wp-plugin-wheel'); ?></td>
+                </tr>
+            <?php else: ?>
+                <?php foreach ($participations as $p): ?>
+                    <tr>
+                        <td><?php echo esc_html($p->id); ?></td>
+                        <td><?php echo esc_html($p->user_name ? $p->user_name : __('Deleted user', 'wp-plugin-wheel')); ?></td>
+                        <td><?php echo esc_html($p->prize_name ? $p->prize_name : __('Deleted prize', 'wp-plugin-wheel')); ?></td>
+                        <td><?php echo esc_html($p->participation_date); ?></td>
+                        <td><?php echo esc_html($p->participated_at); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </tbody>
+    </table>
+
+    <?php if ($total_pages > 1): ?>
+        <div class="tablenav bottom">
+            <div class="tablenav-pages">
+                <?php
+                echo paginate_links(array(
+                    'base'      => add_query_arg('paged', '%#%'),
+                    'format'    => '',
+                    'prev_text' => __('&laquo;'),
+                    'next_text' => __('&raquo;'),
+                    'total'     => $total_pages,
+                    'current'   => $current_page,
+                ));
+                ?>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>
