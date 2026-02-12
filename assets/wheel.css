@@ -1,14 +1,99 @@
+#wpw-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+#wpw-wheel-wrapper {
+    position: relative;
+    width: 360px;
+    height: 360px;
+}
+
+#wpw-pointer {
+    width: 20px;
+    height: 20px;
+    background: #111;
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    z-index: 20;
+    border-radius: 3px 3px 3px 0;
+}
+
 #wp-wheel {
-    width: 300px;
-    height: 300px;
+    width: 360px;
+    height: 360px;
     border-radius: 50%;
-    border: 5px solid #333;
-    margin-bottom: 10px;
-    background: conic-gradient(#ff4d4d 0 60deg,
-            #4dff4d 60deg 120deg,
-            #4d4dff 120deg 180deg,
-            #ffff4d 180deg 240deg,
-            #ff4dff 240deg 300deg,
-            #4dffff 300deg 360deg);
-    transition: transform 4s ease-out;
+    position: relative;
+    box-shadow:
+        0 0 0 6px #111,
+        0 12px 40px rgba(0, 0, 0, 0.15);
+    transition: transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+}
+
+#wpw-canvas {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+#wpw-center-cap {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    background: #111;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 15;
+}
+
+#wp-wheel-spin {
+    padding: 12px 40px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    transition: background 0.2s, transform 0.15s;
+}
+
+#wp-wheel-spin:hover:not(:disabled) {
+    background: #333;
+    transform: translateY(-1px);
+}
+
+#wp-wheel-spin:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+#wp-wheel-spin:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.wpw-message {
+    color: #888;
+    font-size: 14px;
+    margin: 0;
+}
+
+#wpw-result {
+    font-size: 20px;
+    min-height: 28px;
+    color: #111;
+}
+
+#wpw-result strong {
+    font-weight: 700;
+    font-size: 24px;
 }
