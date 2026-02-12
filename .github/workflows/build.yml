@@ -49,7 +49,7 @@ jobs:
               run: |
                   zip_name="wp-plugin-wheel.zip"
                   mkdir -p build/wp-plugin-wheel
-                  cp -r assets build/wp-plugin-wheel/; cp plugin.php build/wp-plugin-wheel/
+                  cp -r assets includes admin build/wp-plugin-wheel/; cp plugin.php build/wp-plugin-wheel/
                   (cd build && zip -r "../$zip_name" wp-plugin-wheel)
                   echo "zip_path=$zip_name" >> $GITHUB_OUTPUT
               shell: bash
