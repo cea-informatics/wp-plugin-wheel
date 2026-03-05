@@ -50,7 +50,9 @@ function wpw_display_wheel() {
     ob_start(); ?>
     <div id="wpw-container">
         <div id="wpw-wheel-wrapper">
-            <div id="wpw-pointer"></div>
+            <svg id="wpw-pointer" xmlns="http://www.w3.org/2000/svg" width="42" height="50" viewBox="0 0 28 32" overflow="visible">
+            <path d="M6,0 Q0,0 0,6 L14,32 L28,6 Q28,0 22,0 Z" fill="#323232" stroke="white" stroke-width="3" stroke-linejoin="round" paint-order="stroke fill"/>
+        </svg>
             <div id="wp-wheel" data-prizes="<?php echo esc_attr(wp_json_encode($prizes_data)); ?>">
                 <canvas id="wpw-canvas" width="400" height="400"></canvas>
             </div>
