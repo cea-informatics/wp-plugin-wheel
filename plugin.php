@@ -3,7 +3,7 @@
 /**
  * Plugin Name:     Custom Wheel
  * Description:     The plugin adds an interactive spinning wheel with prize management.
- * Version:         2.0.0
+ * Version:         2.1.0
  * Author:          CEA Informatics
  * License:         GPL-2.0-or-later
  * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
