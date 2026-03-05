@@ -13,15 +13,12 @@
 }
 
 #wpw-pointer {
-    width: 20px;
-    height: 20px;
-    background: #111;
     position: absolute;
-    top: -4px;
+    top: -25px;
     left: 50%;
-    transform: translateX(-50%) rotate(45deg);
+    transform: translateX(-50%);
     z-index: 20;
-    border-radius: 3px 3px 3px 0;
+    display: block;
 }
 
 #wp-wheel {
@@ -29,9 +26,8 @@
     height: 360px;
     border-radius: 50%;
     position: relative;
-    box-shadow:
-        0 0 0 6px #111,
-        0 12px 40px rgba(0, 0, 0, 0.15);
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 12px #323232, 0 0 0 33px #ffffff;
     transition: transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
 }
 
@@ -43,14 +39,28 @@
 
 #wpw-center-cap {
     position: absolute;
-    width: 36px;
-    height: 36px;
-    background: #111;
+    width: 76px;
+    height: 76px;
+    background: #323232;
+    border: 2px solid #ffffff;
     border-radius: 50%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 15;
+}
+
+#wpw-center-cap::after {
+    content: '';
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    background: #323232;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 #wp-wheel-spin {
@@ -60,7 +70,7 @@
     letter-spacing: 0.5px;
     text-transform: uppercase;
     cursor: pointer;
-    background: #111;
+    background: #F67521;
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -68,7 +78,7 @@
 }
 
 #wp-wheel-spin:hover:not(:disabled) {
-    background: #333;
+    background: #d95e10;
     transform: translateY(-1px);
 }
 

@@ -11,17 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (count === 0) return;
 
-    // Muted, modern palette — alternates between two tones.
-    var palette = [
-        ["#2d3436", "#636e72"],
-        ["#0984e3", "#74b9ff"],
-        ["#00b894", "#55efc4"],
-        ["#e17055", "#fab1a0"],
-        ["#6c5ce7", "#a29bfe"],
-        ["#fdcb6e", "#ffeaa7"],
-        ["#e84393", "#fd79a8"],
-        ["#00cec9", "#81ecec"],
-    ];
+    // Two-tone alternating palette — orange and cream (exact design colors).
+    var palette = ["#F67521", "#FCF6F0"];
 
     var segmentAngle = 360 / count;
     var ctx = canvas.getContext("2d");
@@ -32,50 +23,125 @@ document.addEventListener("DOMContentLoaded", function () {
     var center = size / 2;
     var radius = size / 2;
 
+    // Draw a gift box icon (outline style).
+    function drawGift(cx, cy, s, color) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.8;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        // Body
+        ctx.beginPath();
+        ctx.rect(cx - s * 0.5, cy - s * 0.1, s, s * 0.65);
+        ctx.stroke();
+        // Lid
+        ctx.beginPath();
+        ctx.rect(cx - s * 0.55, cy - s * 0.35, s * 1.1, s * 0.25);
+        ctx.stroke();
+        // Ribbon vertical
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - s * 0.35);
+        ctx.lineTo(cx, cy + s * 0.55);
+        ctx.stroke();
+        // Left bow
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - s * 0.22);
+        ctx.bezierCurveTo(cx - s * 0.18, cy - s * 0.68, cx - s * 0.62, cy - s * 0.3, cx, cy - s * 0.22);
+        ctx.stroke();
+        // Right bow
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - s * 0.22);
+        ctx.bezierCurveTo(cx + s * 0.18, cy - s * 0.68, cx + s * 0.62, cy - s * 0.3, cx, cy - s * 0.22);
+        ctx.stroke();
+    }
+
+    // Draw a shopping cart icon (outline style).
+    function drawCart(cx, cy, s, color) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.8;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        // Handle
+        ctx.beginPath();
+        ctx.moveTo(cx - s * 0.8, cy - s * 0.42);
+        ctx.lineTo(cx - s * 0.42, cy - s * 0.42);
+        ctx.stroke();
+        // Basket
+        ctx.beginPath();
+        ctx.moveTo(cx - s * 0.42, cy - s * 0.42);
+        ctx.lineTo(cx - s * 0.55, cy + s * 0.22);
+        ctx.lineTo(cx + s * 0.55, cy + s * 0.22);
+        ctx.lineTo(cx + s * 0.42, cy - s * 0.42);
+        ctx.stroke();
+        // Wheels
+        ctx.beginPath();
+        ctx.arc(cx - s * 0.28, cy + s * 0.48, s * 0.14, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(cx + s * 0.32, cy + s * 0.48, s * 0.14, 0, Math.PI * 2);
+        ctx.stroke();
+    }
+
+    // Draw a medal/badge icon (outline style).
+    function drawMedal(cx, cy, s, color) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.8;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        // Outer circle
+        ctx.beginPath();
+        ctx.arc(cx, cy - s * 0.12, s * 0.5, 0, Math.PI * 2);
+        ctx.stroke();
+        // Inner circle
+        ctx.beginPath();
+        ctx.arc(cx, cy - s * 0.12, s * 0.22, 0, Math.PI * 2);
+        ctx.stroke();
+        // Ribbon tails
+        ctx.beginPath();
+        ctx.moveTo(cx - s * 0.18, cy + s * 0.38);
+        ctx.lineTo(cx - s * 0.18, cy + s * 0.72);
+        ctx.lineTo(cx, cy + s * 0.54);
+        ctx.lineTo(cx + s * 0.18, cy + s * 0.72);
+        ctx.lineTo(cx + s * 0.18, cy + s * 0.38);
+        ctx.stroke();
+    }
+
+    var iconDrawers = [drawGift, drawCart, drawMedal];
+
     for (var i = 0; i < count; i++) {
         var startAngle = (segmentAngle * i - 90) * (Math.PI / 180);
         var endAngle = (segmentAngle * (i + 1) - 90) * (Math.PI / 180);
-        var color = palette[i % palette.length];
+        var fillColor = palette[i % palette.length];
 
         // Segment fill.
         ctx.beginPath();
         ctx.moveTo(center, center);
         ctx.arc(center, center, radius, startAngle, endAngle);
         ctx.closePath();
-        ctx.fillStyle = color[0];
+        ctx.fillStyle = fillColor;
         ctx.fill();
 
-        // Thin separator line.
+        // Separator line.
         ctx.beginPath();
         ctx.moveTo(center, center);
         ctx.lineTo(
             center + Math.cos(startAngle) * radius,
             center + Math.sin(startAngle) * radius
         );
-        ctx.strokeStyle = "rgba(255, 255, 255, 0.25)";
-        ctx.lineWidth = 1;
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
+        ctx.lineWidth = 1.5;
         ctx.stroke();
 
-        // Text label.
-        var textAngle = (startAngle + endAngle) / 2;
-        var textRadius = radius * 0.6;
-        var x = center + Math.cos(textAngle) * textRadius;
-        var y = center + Math.sin(textAngle) * textRadius;
+        // Icon position — centered in segment.
+        var iconAngle = (startAngle + endAngle) / 2;
+        var iconRadius = radius * 0.62;
+        var ix = center + Math.cos(iconAngle) * iconRadius;
+        var iy = center + Math.sin(iconAngle) * iconRadius;
 
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate(textAngle + Math.PI / 2);
-        ctx.fillStyle = "#fff";
-        ctx.font = "600 12px Inter, -apple-system, BlinkMacSystemFont, sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
+        var iconColor = i % 2 === 0
+            ? "#ffffff"
+            : "#7D5B3B";
 
-        var name = prizes[i].name;
-        if (name.length > 14) {
-            name = name.substring(0, 12) + "\u2026";
-        }
-        ctx.fillText(name, 0, 0);
-        ctx.restore();
+        iconDrawers[i % iconDrawers.length](ix, iy, 16, iconColor);
     }
 
     var spinning = false;
