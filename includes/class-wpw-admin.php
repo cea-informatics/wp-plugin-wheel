@@ -137,6 +137,17 @@ class WPW_Admin {
             wp_die(__('Unauthorized access.', 'wp-plugin-wheel'));
         }
 
+        // Handle delete action.
+        if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
+            $id = absint($_GET['id']);
+            if (!isset($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'wpw_delete_participation_' . $id)) {
+                wp_die(__('Invalid nonce.', 'wp-plugin-wheel'));
+            }
+            WPW_DB::delete_participation($id);
+            wp_redirect(admin_url('admin.php?page=wpw-participations&message=deleted'));
+            exit;
+        }
+
         $per_page = 20;
         $current_page = isset($_GET['paged']) ? max(1, absint($_GET['paged'])) : 1;
         $offset = ($current_page - 1) * $per_page;
@@ -144,6 +155,8 @@ class WPW_Admin {
         $participations = WPW_DB::get_participations($per_page, $offset);
         $total = WPW_DB::count_participations();
         $total_pages = ceil($total / $per_page);
+
+        $deleted = isset($_GET['message']) && $_GET['message'] === 'deleted';
 
         include WPW_PLUGIN_DIR . 'admin/views/participations-list.php';
     }

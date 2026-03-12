@@ -165,6 +165,16 @@ class WPW_DB {
     }
 
     /**
+     * Delete a participation by ID.
+     */
+    public static function delete_participation($id) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'wpw_participations';
+
+        return $wpdb->delete($table, array('id' => $id), array('%d'));
+    }
+
+    /**
      * Count total participations.
      */
     public static function count_participations() {
