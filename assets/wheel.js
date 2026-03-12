@@ -11,12 +11,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (count === 0) return;
 
-    // Two-tone alternating palette — orange and cream (exact design colors).
+    // Two-tone alternating palette — orange and cream.
     var palette = ["#F67521", "#FCF6F0"];
+    // Segment border/separator color.
+    var separatorColor = "rgba(255, 255, 255, 0.8)";
 
     var segmentAngle = 360 / count;
     var ctx = canvas.getContext("2d");
-    var size = 360;
+    var size = 400;
     canvas.width = size * 2;
     canvas.height = size * 2;
     ctx.scale(2, 2);
@@ -127,8 +129,8 @@ document.addEventListener("DOMContentLoaded", function () {
             center + Math.cos(startAngle) * radius,
             center + Math.sin(startAngle) * radius
         );
-        ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
-        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = separatorColor;
+        ctx.lineWidth = 2;
         ctx.stroke();
 
         // Icon position — centered in segment.
@@ -146,6 +148,53 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var spinning = false;
     var currentRotation = 0;
+
+    var modal = document.getElementById("wpw-modal");
+    var modalPrize = document.getElementById("wpw-modal-prize");
+    var modalClose = document.getElementById("wpw-modal-close");
+    var modalBackdrop = modal ? modal.querySelector(".wpw-modal-backdrop") : null;
+
+    function openModal(prizeName) {
+        if (!modal) return;
+        modalPrize.textContent = prizeName;
+        modal.setAttribute("aria-hidden", "false");
+        modal.classList.add("wpw-modal--open");
+    }
+
+    function closeModal() {
+        if (!modal) return;
+        modal.setAttribute("aria-hidden", "true");
+        modal.classList.remove("wpw-modal--open");
+    }
+
+    if (modalClose) modalClose.addEventListener("click", closeModal);
+    if (modalBackdrop) modalBackdrop.addEventListener("click", closeModal);
+
+    function launchConfetti() {
+        var duration = 1500;
+        var end = Date.now() + duration;
+        var colors = ["#F67521", "#ffffff", "#323232", "#FCF6F0", "#ffdd00"];
+
+        (function frame() {
+            confetti({
+                particleCount: 6,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: colors,
+                zIndex: 10000,
+            });
+            confetti({
+                particleCount: 6,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: colors,
+                zIndex: 10000,
+            });
+            if (Date.now() < end) requestAnimationFrame(frame);
+        })();
+    }
 
     btn.addEventListener("click", function () {
         if (spinning || btn.disabled) return;
@@ -180,6 +229,8 @@ document.addEventListener("DOMContentLoaded", function () {
             setTimeout(function () {
                 result.innerHTML = "<strong>" + escapeHtml(prizeName) + "</strong>";
                 spinning = false;
+                launchConfetti();
+                openModal(prizeName);
             }, 5200);
         })
         .catch(function () {

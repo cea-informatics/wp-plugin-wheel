@@ -1,33 +1,175 @@
+/* ─── Layout ────────────────────────────────────────────────────── */
 #wpw-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 24px;
+    gap: 60px;
     font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    padding: 48px 0;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 75%;
 }
 
+/* ─── Left column : text ─────────────────────────────────────────── */
+#wpw-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    flex: 1;
+    min-width: 280px;
+    max-width: 460px;
+}
+
+.wpw-title {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+}
+
+.wpw-description {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.65;
+    color: #555;
+}
+
+.wpw-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.wpw-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 12px;
+}
+
+/* ─── Button ─────────────────────────────────────────────────────── */
+#wp-wheel-spin {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 32px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    cursor: pointer;
+    background: #F67521;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(246, 117, 33, 0.35);
+}
+
+#wp-wheel-spin:hover:not(:disabled) {
+    background: #d95e10;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(246, 117, 33, 0.45);
+}
+
+#wp-wheel-spin:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(246, 117, 33, 0.3);
+}
+
+#wp-wheel-spin:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* ─── Login button ───────────────────────────────────────────────── */
+.wpw-login-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 13px 32px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-decoration: none;
+    color: #F67521;
+    background: transparent;
+    border: 2px solid #F67521;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+
+.wpw-login-btn:hover {
+    background: #F67521;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* ─── Messages & result ──────────────────────────────────────────── */
+.wpw-message {
+    color: #888;
+    font-size: 14px;
+    margin: 0;
+}
+
+#wpw-result {
+    font-size: 18px;
+    min-height: 28px;
+    color: #1a1a1a;
+}
+
+#wpw-result strong {
+    font-weight: 800;
+    font-size: 22px;
+    color: #F67521;
+}
+
+/* ─── Right column : wheel ───────────────────────────────────────── */
 #wpw-wheel-wrapper {
     position: relative;
-    width: 360px;
-    height: 360px;
+    width: 400px;
+    height: 400px;
+    flex-shrink: 0;
+}
+
+/* Decorative outer glow ring */
+#wpw-wheel-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: -28px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(246,117,33,0.12) 0%, transparent 70%);
+    pointer-events: none;
 }
 
 #wpw-pointer {
     position: absolute;
-    top: -25px;
+    top: -20px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 20;
     display: block;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
 
 #wp-wheel {
-    width: 360px;
-    height: 360px;
+    width: 400px;
+    height: 400px;
     border-radius: 50%;
     position: relative;
-    border: 2px solid #ffffff;
-    box-shadow: 0 0 0 12px #323232, 0 0 0 33px #ffffff;
+    border: 3px solid #ffffff;
+    box-shadow:
+        0 0 0 10px #323232,
+        0 0 0 28px #ffffff,
+        0 0 0 30px #e8e8e8,
+        0 8px 40px rgba(0, 0, 0, 0.25);
     transition: transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
 }
 
@@ -39,71 +181,149 @@
 
 #wpw-center-cap {
     position: absolute;
-    width: 76px;
-    height: 76px;
+    width: 72px;
+    height: 72px;
     background: #323232;
-    border: 2px solid #ffffff;
+    border: 3px solid #ffffff;
     border-radius: 50%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 15;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
 
 #wpw-center-cap::after {
     content: '';
     position: absolute;
-    width: 56px;
-    height: 56px;
-    background: #323232;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #3a3a3a, #1a1a1a);
     border-radius: 50%;
-    border: 2px solid #ffffff;
+    border: 2px solid rgba(255,255,255,0.25);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-#wp-wheel-spin {
-    padding: 12px 40px;
+/* ─── Modal ──────────────────────────────────────────────────────── */
+.wpw-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+
+.wpw-modal--open {
+    display: flex;
+}
+
+.wpw-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(3px);
+}
+
+.wpw-modal-box {
+    position: relative;
+    z-index: 1;
+    background: #fff;
+    border-radius: 20px;
+    padding: 48px 40px 40px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.2);
+    animation: wpw-modal-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes wpw-modal-in {
+    from { opacity: 0; transform: scale(0.8) translateY(20px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.wpw-modal-icon {
+    font-size: 56px;
+    line-height: 1;
+    margin-bottom: 16px;
+}
+
+.wpw-modal-title {
+    margin: 0 0 6px;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #1a1a1a;
+}
+
+.wpw-modal-subtitle {
+    margin: 0 0 8px;
     font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
+    color: #888;
+}
+
+.wpw-modal-prize {
+    margin: 0 0 32px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #F67521;
+}
+
+.wpw-modal-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px 36px;
+    font-size: 15px;
+    font-weight: 700;
     cursor: pointer;
     background: #F67521;
     color: #fff;
     border: none;
     border-radius: 8px;
     transition: background 0.2s, transform 0.15s;
+    box-shadow: 0 4px 16px rgba(246, 117, 33, 0.35);
 }
 
-#wp-wheel-spin:hover:not(:disabled) {
+.wpw-modal-close:hover {
     background: #d95e10;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
 }
 
-#wp-wheel-spin:active:not(:disabled) {
-    transform: translateY(0);
-}
+/* ─── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    #wpw-container {
+        flex-direction: column-reverse;
+        align-items: center;
+        gap: 36px;
+    }
 
-#wp-wheel-spin:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-}
+    #wpw-content {
+        align-items: center;
+        text-align: center;
+        max-width: 100%;
+    }
 
-.wpw-message {
-    color: #888;
-    font-size: 14px;
-    margin: 0;
-}
+    .wpw-actions {
+        align-items: center;
+    }
 
-#wpw-result {
-    font-size: 20px;
-    min-height: 28px;
-    color: #111;
-}
+    #wpw-wheel-wrapper {
+        width: 320px;
+        height: 320px;
+    }
 
-#wpw-result strong {
-    font-weight: 700;
-    font-size: 24px;
+    #wp-wheel {
+        width: 320px;
+        height: 320px;
+    }
+
+    .wpw-title {
+        font-size: 1.6rem;
+    }
 }
