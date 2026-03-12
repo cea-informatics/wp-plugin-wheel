@@ -3,6 +3,10 @@
 <div class="wrap">
     <h1><?php esc_html_e('Participations', 'wp-plugin-wheel'); ?></h1>
 
+    <?php if (!empty($deleted)): ?>
+        <div class="notice notice-success is-dismissible"><p><?php esc_html_e('Participation deleted.', 'wp-plugin-wheel'); ?></p></div>
+    <?php endif; ?>
+
     <table class="wp-list-table widefat striped">
         <thead>
             <tr>
@@ -11,12 +15,13 @@
                 <th><?php esc_html_e('Prize Won', 'wp-plugin-wheel'); ?></th>
                 <th><?php esc_html_e('Date', 'wp-plugin-wheel'); ?></th>
                 <th><?php esc_html_e('Time', 'wp-plugin-wheel'); ?></th>
+                <th><?php esc_html_e('Actions', 'wp-plugin-wheel'); ?></th>
             </tr>
         </thead>
         <tbody>
             <?php if (empty($participations)): ?>
                 <tr>
-                    <td colspan="5"><?php esc_html_e('No participations found.', 'wp-plugin-wheel'); ?></td>
+                    <td colspan="6"><?php esc_html_e('No participations found.', 'wp-plugin-wheel'); ?></td>
                 </tr>
             <?php else: ?>
                 <?php foreach ($participations as $p): ?>
@@ -26,6 +31,13 @@
                         <td><?php echo esc_html($p->prize_name ? $p->prize_name : __('Deleted prize', 'wp-plugin-wheel')); ?></td>
                         <td><?php echo esc_html($p->participation_date); ?></td>
                         <td><?php echo esc_html($p->participated_at); ?></td>
+                        <td>
+                            <a href="<?php echo esc_url(wp_nonce_url(admin_url('admin.php?page=wpw-participations&action=delete&id=' . $p->id), 'wpw_delete_participation_' . $p->id)); ?>"
+                               class="wpw-delete-link"
+                               onclick="return confirm('<?php esc_attr_e('Delete this participation?', 'wp-plugin-wheel'); ?>')">
+                                <?php esc_html_e('Delete', 'wp-plugin-wheel'); ?>
+                            </a>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             <?php endif; ?>
