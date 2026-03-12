@@ -48,23 +48,43 @@ function wpw_display_wheel() {
     $disabled = (!$is_logged_in || $has_played) ? ' disabled' : '';
 
     ob_start(); ?>
+    <div id="wpw-modal" class="wpw-modal" aria-hidden="true">
+        <div class="wpw-modal-backdrop"></div>
+        <div class="wpw-modal-box" role="dialog" aria-modal="true">
+            <div class="wpw-modal-icon">🎉</div>
+            <h3 class="wpw-modal-title">Félicitations&nbsp;!</h3>
+            <p class="wpw-modal-subtitle">Vous avez gagné</p>
+            <p class="wpw-modal-prize" id="wpw-modal-prize"></p>
+            <button class="wpw-modal-close" id="wpw-modal-close">Super, merci&nbsp;!</button>
+        </div>
+    </div>
     <div id="wpw-container">
+        <div id="wpw-content">
+            <h2 class="wpw-title">Tournez la roue &amp; Gagnez votre surprise&nbsp;!</h2>
+            <p class="wpw-description">Faites tourner notre roulette et débloquez une offre réservée à nos visiteurs.</p>
+            <p class="wpw-description">Remises privées, cadeaux surprises ou avantages spéciaux… laissez le hasard vous récompenser.</p>
+            <div class="wpw-actions">
+                <?php if ($has_played): ?>
+                    <p class="wpw-message"><?php esc_html_e('You already played today. Come back tomorrow!', 'wp-plugin-wheel'); ?></p>
+                <?php endif; ?>
+                <div class="wpw-buttons">
+                    <button id="wp-wheel-spin"<?php echo $disabled; ?>>Tourner la roue</button>
+                    <?php if (!$is_logged_in): ?>
+                        <a href="/login" class="wpw-login-btn">Se connecter</a>
+                    <?php endif; ?>
+                </div>
+                <div id="wpw-result"></div>
+            </div>
+        </div>
         <div id="wpw-wheel-wrapper">
             <svg id="wpw-pointer" xmlns="http://www.w3.org/2000/svg" width="42" height="50" viewBox="0 0 28 32" overflow="visible">
-            <path d="M6,0 Q0,0 0,6 L14,32 L28,6 Q28,0 22,0 Z" fill="#323232" stroke="white" stroke-width="3" stroke-linejoin="round" paint-order="stroke fill"/>
-        </svg>
+                <path d="M6,0 Q0,0 0,6 L14,32 L28,6 Q28,0 22,0 Z" fill="#323232" stroke="white" stroke-width="3" stroke-linejoin="round" paint-order="stroke fill"/>
+            </svg>
             <div id="wp-wheel" data-prizes="<?php echo esc_attr(wp_json_encode($prizes_data)); ?>">
                 <canvas id="wpw-canvas" width="400" height="400"></canvas>
             </div>
             <div id="wpw-center-cap"></div>
         </div>
-        <?php if (!$is_logged_in): ?>
-            <p class="wpw-message"><?php esc_html_e('Please log in to participate.', 'wp-plugin-wheel'); ?></p>
-        <?php elseif ($has_played): ?>
-            <p class="wpw-message"><?php esc_html_e('You already played today. Come back tomorrow!', 'wp-plugin-wheel'); ?></p>
-        <?php endif; ?>
-        <button id="wp-wheel-spin"<?php echo $disabled; ?>><?php esc_html_e('Spin the wheel', 'wp-plugin-wheel'); ?></button>
-        <div id="wpw-result"></div>
     </div>
     <?php
     return ob_get_clean();
@@ -72,7 +92,8 @@ function wpw_display_wheel() {
 
 function wpw_enqueue_scripts() {
     wp_enqueue_style('wpw-style', WPW_PLUGIN_URL . 'assets/wheel.css', array(), WPW_VERSION);
-    wp_enqueue_script('wpw-script', WPW_PLUGIN_URL . 'assets/wheel.js', array(), WPW_VERSION, true);
+    wp_enqueue_script('canvas-confetti', 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js', array(), null, true);
+    wp_enqueue_script('wpw-script', WPW_PLUGIN_URL . 'assets/wheel.js', array('canvas-confetti'), WPW_VERSION, true);
     wp_localize_script('wpw-script', 'wpw_ajax', array(
         'url'   => admin_url('admin-ajax.php'),
         'nonce' => wp_create_nonce('wpw_spin_nonce'),
