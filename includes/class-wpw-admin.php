@@ -14,8 +14,8 @@ class WPW_Admin {
      */
     public static function register_menus() {
         add_menu_page(
-            __('Roue Personnalisée', 'wp-plugin-wheel'),
-            __('Roue Personnalisée', 'wp-plugin-wheel'),
+            __('Jeu concours', 'wp-plugin-wheel'),
+            __('Jeu concours', 'wp-plugin-wheel'),
             'manage_options',
             'wpw-prizes',
             array(__CLASS__, 'page_prizes'),
