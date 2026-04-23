@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }, 5200);
         })
         .catch(function () {
-            result.textContent = "Network error.";
+            result.textContent = "Erreur réseau.";
             spinning = false;
             btn.disabled = false;
         });

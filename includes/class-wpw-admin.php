@@ -14,8 +14,8 @@ class WPW_Admin {
      */
     public static function register_menus() {
         add_menu_page(
-            __('Custom Wheel', 'wp-plugin-wheel'),
-            __('Custom Wheel', 'wp-plugin-wheel'),
+            __('Roue Personnalisée', 'wp-plugin-wheel'),
+            __('Roue Personnalisée', 'wp-plugin-wheel'),
             'manage_options',
             'wpw-prizes',
             array(__CLASS__, 'page_prizes'),
@@ -25,8 +25,8 @@ class WPW_Admin {
 
         add_submenu_page(
             'wpw-prizes',
-            __('Prizes', 'wp-plugin-wheel'),
-            __('Prizes', 'wp-plugin-wheel'),
+            __('Lots', 'wp-plugin-wheel'),
+            __('Lots', 'wp-plugin-wheel'),
             'manage_options',
             'wpw-prizes',
             array(__CLASS__, 'page_prizes')
@@ -58,7 +58,7 @@ class WPW_Admin {
      */
     public static function page_prizes() {
         if (!current_user_can('manage_options')) {
-            wp_die(__('Unauthorized access.', 'wp-plugin-wheel'));
+            wp_die(__('Accès non autorisé.', 'wp-plugin-wheel'));
         }
 
         $action = isset($_GET['action']) ? sanitize_text_field($_GET['action']) : 'list';
@@ -92,7 +92,7 @@ class WPW_Admin {
      */
     private static function handle_prize_save() {
         if (!check_admin_referer('wpw_save_prize', 'wpw_nonce')) {
-            wp_die(__('Invalid nonce.', 'wp-plugin-wheel'));
+            wp_die(__('Nonce invalide.', 'wp-plugin-wheel'));
         }
 
         $data = array(
@@ -120,7 +120,7 @@ class WPW_Admin {
      */
     private static function handle_prize_delete() {
         if (!isset($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'wpw_delete_prize_' . absint($_GET['id']))) {
-            wp_die(__('Invalid nonce.', 'wp-plugin-wheel'));
+            wp_die(__('Nonce invalide.', 'wp-plugin-wheel'));
         }
 
         WPW_DB::delete_prize(absint($_GET['id']));
@@ -134,14 +134,14 @@ class WPW_Admin {
      */
     public static function page_participations() {
         if (!current_user_can('manage_options')) {
-            wp_die(__('Unauthorized access.', 'wp-plugin-wheel'));
+            wp_die(__('Accès non autorisé.', 'wp-plugin-wheel'));
         }
 
         // Handle delete action.
         if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
             $id = absint($_GET['id']);
             if (!isset($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'wpw_delete_participation_' . $id)) {
-                wp_die(__('Invalid nonce.', 'wp-plugin-wheel'));
+                wp_die(__('Nonce invalide.', 'wp-plugin-wheel'));
             }
             WPW_DB::delete_participation($id);
             wp_redirect(admin_url('admin.php?page=wpw-participations&message=deleted'));
