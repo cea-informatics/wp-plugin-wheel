@@ -46,7 +46,7 @@ function wpw_display_wheel() {
     }
 
     $disabled = $has_played ? ' disabled' : '';
-    $login_url = wp_login_url(get_permalink());
+    $login_url = '/login';
 
     ob_start(); ?>
     <div id="wpw-modal" class="wpw-modal" aria-hidden="true">

@@ -68,7 +68,7 @@
     background: #2c2c2c;
     color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 0 !important;
     transition: filter 0.2s ease;
     box-shadow: none;
     text-decoration: none;
