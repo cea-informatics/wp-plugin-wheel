@@ -198,6 +198,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     btn.addEventListener("click", function () {
         if (spinning || btn.disabled) return;
+
+        if (btn.getAttribute("data-logged-in") === "0") {
+            window.location.href = btn.getAttribute("data-login-url");
+            return;
+        }
+
         spinning = true;
         btn.disabled = true;
         result.textContent = "";

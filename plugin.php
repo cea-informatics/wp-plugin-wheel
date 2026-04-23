@@ -45,7 +45,8 @@ function wpw_display_wheel() {
         );
     }
 
-    $disabled = (!$is_logged_in || $has_played) ? ' disabled' : '';
+    $disabled = $has_played ? ' disabled' : '';
+    $login_url = wp_login_url(get_permalink());
 
     ob_start(); ?>
     <div id="wpw-modal" class="wpw-modal" aria-hidden="true">
@@ -68,10 +69,7 @@ function wpw_display_wheel() {
                     <p class="wpw-message"><?php esc_html_e('You already played today. Come back tomorrow!', 'wp-plugin-wheel'); ?></p>
                 <?php endif; ?>
                 <div class="wpw-buttons">
-                    <button id="wp-wheel-spin"<?php echo $disabled; ?>>Tourner la roue</button>
-                    <?php if (!$is_logged_in): ?>
-                        <a href="/login" class="wpw-login-btn">Se connecter</a>
-                    <?php endif; ?>
+                    <button id="wp-wheel-spin"<?php echo $disabled; ?> data-logged-in="<?php echo $is_logged_in ? '1' : '0'; ?>" data-login-url="<?php echo esc_attr($login_url); ?>">Tourner la roue</button>
                 </div>
                 <div id="wpw-result"></div>
             </div>

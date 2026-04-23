@@ -62,54 +62,32 @@
     gap: 8px;
     padding: 13px 32px;
     font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.4px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
     cursor: pointer;
-    background: #F67521;
+    background: #323232;
     color: #fff;
     border: none;
     border-radius: 6px;
     transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-    box-shadow: 0 4px 16px rgba(246, 117, 33, 0.35);
+    box-shadow: none;
 }
 
 #wp-wheel-spin:hover:not(:disabled) {
-    background: #d95e10;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(246, 117, 33, 0.45);
+    background: #1a1a1a;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
 #wp-wheel-spin:active:not(:disabled) {
     transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(246, 117, 33, 0.3);
+    box-shadow: none;
 }
 
 #wp-wheel-spin:disabled {
     opacity: 0.35;
     cursor: not-allowed;
     box-shadow: none;
-}
-
-/* ─── Login button ───────────────────────────────────────────────── */
-.wpw-login-btn {
-    display: inline-flex;
-    align-items: center;
-    padding: 13px 32px;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.4px;
-    text-decoration: none;
-    color: #F67521;
-    background: transparent;
-    border: 2px solid #F67521;
-    border-radius: 6px;
-    transition: background 0.2s, color 0.2s, transform 0.15s;
-}
-
-.wpw-login-btn:hover {
-    background: #F67521;
-    color: #fff;
-    transform: translateY(-2px);
 }
 
 /* ─── Messages & result ──────────────────────────────────────────── */
