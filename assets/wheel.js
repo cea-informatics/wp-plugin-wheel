@@ -151,12 +151,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var modal = document.getElementById("wpw-modal");
     var modalPrize = document.getElementById("wpw-modal-prize");
+    var modalPrizeDesc = document.getElementById("wpw-modal-prize-desc");
     var modalClose = document.getElementById("wpw-modal-close");
     var modalBackdrop = modal ? modal.querySelector(".wpw-modal-backdrop") : null;
 
-    function openModal(prizeName) {
+    function openModal(prizeName, prizeDesc) {
         if (!modal) return;
         modalPrize.textContent = prizeName;
+        if (modalPrizeDesc) {
+            modalPrizeDesc.textContent = prizeDesc || "";
+            modalPrizeDesc.style.display = prizeDesc ? "" : "none";
+        }
         modal.setAttribute("aria-hidden", "false");
         modal.classList.add("wpw-modal--open");
     }
@@ -198,12 +203,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     btn.addEventListener("click", function () {
         if (spinning || btn.disabled) return;
-
-        if (btn.getAttribute("data-logged-in") === "0") {
-            window.location.href = btn.getAttribute("data-login-url");
-            return;
-        }
-
         spinning = true;
         btn.disabled = true;
         result.textContent = "";
@@ -223,6 +222,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             var index = data.data.index;
             var prizeName = data.data.prize.name;
+            var prizeDesc = data.data.prize.description || "";
 
             var targetAngle = 360 - (segmentAngle * index + segmentAngle / 2);
             var fullSpins = 360 * 10;
@@ -236,11 +236,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 result.innerHTML = "<strong>" + escapeHtml(prizeName) + "</strong>";
                 spinning = false;
                 launchConfetti();
-                openModal(prizeName);
+                openModal(prizeName, prizeDesc);
             }, 5200);
         })
         .catch(function () {
-            result.textContent = "Erreur réseau.";
+            result.textContent = "Network error.";
             spinning = false;
             btn.disabled = false;
         });

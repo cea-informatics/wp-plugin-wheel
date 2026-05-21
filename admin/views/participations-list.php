@@ -4,38 +4,38 @@
     <h1><?php esc_html_e('Participations', 'wp-plugin-wheel'); ?></h1>
 
     <?php if (!empty($deleted)): ?>
-        <div class="notice notice-success is-dismissible"><p><?php esc_html_e('Participation supprimée.', 'wp-plugin-wheel'); ?></p></div>
+        <div class="notice notice-success is-dismissible"><p><?php esc_html_e('Participation deleted.', 'wp-plugin-wheel'); ?></p></div>
     <?php endif; ?>
 
     <table class="wp-list-table widefat striped">
         <thead>
             <tr>
                 <th><?php esc_html_e('ID', 'wp-plugin-wheel'); ?></th>
-                <th><?php esc_html_e('Utilisateur', 'wp-plugin-wheel'); ?></th>
-                <th><?php esc_html_e('Lot remporté', 'wp-plugin-wheel'); ?></th>
+                <th><?php esc_html_e('User', 'wp-plugin-wheel'); ?></th>
+                <th><?php esc_html_e('Prize Won', 'wp-plugin-wheel'); ?></th>
                 <th><?php esc_html_e('Date', 'wp-plugin-wheel'); ?></th>
-                <th><?php esc_html_e('Heure', 'wp-plugin-wheel'); ?></th>
+                <th><?php esc_html_e('Time', 'wp-plugin-wheel'); ?></th>
                 <th><?php esc_html_e('Actions', 'wp-plugin-wheel'); ?></th>
             </tr>
         </thead>
         <tbody>
             <?php if (empty($participations)): ?>
                 <tr>
-                    <td colspan="6"><?php esc_html_e('Aucune participation trouvée.', 'wp-plugin-wheel'); ?></td>
+                    <td colspan="6"><?php esc_html_e('No participations found.', 'wp-plugin-wheel'); ?></td>
                 </tr>
             <?php else: ?>
                 <?php foreach ($participations as $p): ?>
                     <tr>
                         <td><?php echo esc_html($p->id); ?></td>
-                        <td><?php echo esc_html($p->user_name ? $p->user_name : __('Utilisateur supprimé', 'wp-plugin-wheel')); ?></td>
-                        <td><?php echo esc_html($p->prize_name ? $p->prize_name : __('Lot supprimé', 'wp-plugin-wheel')); ?></td>
+                        <td><?php echo esc_html($p->user_name ? $p->user_name : __('Deleted user', 'wp-plugin-wheel')); ?></td>
+                        <td><?php echo esc_html($p->prize_name ? $p->prize_name : __('Deleted prize', 'wp-plugin-wheel')); ?></td>
                         <td><?php echo esc_html($p->participation_date); ?></td>
                         <td><?php echo esc_html($p->participated_at); ?></td>
                         <td>
                             <a href="<?php echo esc_url(wp_nonce_url(admin_url('admin.php?page=wpw-participations&action=delete&id=' . $p->id), 'wpw_delete_participation_' . $p->id)); ?>"
                                class="wpw-delete-link"
-                               onclick="return confirm('<?php esc_attr_e('Supprimer cette participation ?', 'wp-plugin-wheel'); ?>')">
-                                <?php esc_html_e('Supprimer', 'wp-plugin-wheel'); ?>
+                               onclick="return confirm('<?php esc_attr_e('Delete this participation?', 'wp-plugin-wheel'); ?>')">
+                                <?php esc_html_e('Delete', 'wp-plugin-wheel'); ?>
                             </a>
                         </td>
                     </tr>

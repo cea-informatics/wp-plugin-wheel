@@ -3,7 +3,7 @@
 /**
  * Plugin Name:     Custom Wheel
  * Description:     The plugin adds an interactive spinning wheel with prize management.
- * Version:         2.4.4
+ * Version:         2.3.1
  * Author:          CEA Informatics
  * License:         GPL-2.0-or-later
  * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
@@ -31,7 +31,7 @@ function wpw_display_wheel() {
     $prizes = WPW_DB::get_prizes(true);
 
     if (empty($prizes)) {
-        return '<p>' . esc_html__('La roue n\'est pas encore configurée.', 'wp-plugin-wheel') . '</p>';
+        return '<p>' . esc_html__('The wheel is not configured yet.', 'wp-plugin-wheel') . '</p>';
     }
 
     $is_logged_in = is_user_logged_in();
@@ -40,13 +40,13 @@ function wpw_display_wheel() {
     $prizes_data = array();
     foreach ($prizes as $prize) {
         $prizes_data[] = array(
-            'id'   => $prize->id,
-            'name' => $prize->name,
+            'id'          => $prize->id,
+            'name'        => $prize->name,
+            'description' => $prize->description,
         );
     }
 
-    $disabled = $has_played ? ' disabled' : '';
-    $login_url = '/login';
+    $disabled = (!$is_logged_in || $has_played) ? ' disabled' : '';
 
     ob_start(); ?>
     <div id="wpw-modal" class="wpw-modal" aria-hidden="true">
@@ -55,7 +55,10 @@ function wpw_display_wheel() {
             <div class="wpw-modal-icon">🎉</div>
             <h3 class="wpw-modal-title">Félicitations&nbsp;!</h3>
             <p class="wpw-modal-subtitle">Vous avez gagné</p>
-            <p class="wpw-modal-prize" id="wpw-modal-prize"></p>
+            <div class="wpw-modal-prize-card">
+                <p class="wpw-modal-prize" id="wpw-modal-prize"></p>
+                <p class="wpw-modal-prize-desc" id="wpw-modal-prize-desc"></p>
+            </div>
             <button class="wpw-modal-close" id="wpw-modal-close">Super, merci&nbsp;!</button>
         </div>
     </div>
@@ -66,10 +69,13 @@ function wpw_display_wheel() {
             <p class="wpw-description">Remises privées, cadeaux surprises ou avantages spéciaux… laissez le hasard vous récompenser.</p>
             <div class="wpw-actions">
                 <?php if ($has_played): ?>
-                    <p class="wpw-message"><?php esc_html_e('Vous avez déjà joué aujourd\'hui. Revenez demain !', 'wp-plugin-wheel'); ?></p>
+                    <p class="wpw-message"><?php esc_html_e('You already played today. Come back tomorrow!', 'wp-plugin-wheel'); ?></p>
                 <?php endif; ?>
                 <div class="wpw-buttons">
-                    <button id="wp-wheel-spin"<?php echo $disabled; ?> data-logged-in="<?php echo $is_logged_in ? '1' : '0'; ?>" data-login-url="<?php echo esc_attr($login_url); ?>">Tourner la roue</button>
+                    <button id="wp-wheel-spin"<?php echo $disabled; ?>>Tourner la roue</button>
+                    <?php if (!$is_logged_in): ?>
+                        <a href="/login" class="wpw-login-btn">Se connecter</a>
+                    <?php endif; ?>
                 </div>
                 <div id="wpw-result"></div>
             </div>
