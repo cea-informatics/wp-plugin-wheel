@@ -19,7 +19,7 @@ class WPW_Ajax {
 
         if (WPW_DB::has_participated_today($user_id)) {
             wp_send_json_error(array(
-                'message' => __('You already played today. Come back tomorrow!', 'wp-plugin-wheel'),
+                'message' => __('Vous avez déjà joué aujourd\'hui. Revenez demain !', 'wp-plugin-wheel'),
             ));
         }
 
@@ -27,7 +27,7 @@ class WPW_Ajax {
 
         if (!$prize) {
             wp_send_json_error(array(
-                'message' => __('No prizes available at the moment.', 'wp-plugin-wheel'),
+                'message' => __('Aucun gain disponible pour le moment.', 'wp-plugin-wheel'),
             ));
         }
 
@@ -46,7 +46,7 @@ class WPW_Ajax {
 
         if ($result === false) {
             wp_send_json_error(array(
-                'message' => __('You already played today. Come back tomorrow!', 'wp-plugin-wheel'),
+                'message' => __('Vous avez déjà joué aujourd\'hui. Revenez demain !', 'wp-plugin-wheel'),
             ));
         }
 
@@ -66,7 +66,7 @@ class WPW_Ajax {
      */
     public static function handle_spin_nopriv() {
         wp_send_json_error(array(
-            'message' => __('You must be logged in to participate.', 'wp-plugin-wheel'),
+            'message' => __('Vous devez être connecté pour participer.', 'wp-plugin-wheel'),
         ));
     }
 }

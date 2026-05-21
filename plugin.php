@@ -31,7 +31,7 @@ function wpw_display_wheel() {
     $prizes = WPW_DB::get_prizes(true);
 
     if (empty($prizes)) {
-        return '<p>' . esc_html__('The wheel is not configured yet.', 'wp-plugin-wheel') . '</p>';
+        return '<p>' . esc_html__('La roue n\'est pas encore configurée.', 'wp-plugin-wheel') . '</p>';
     }
 
     $is_logged_in = is_user_logged_in();
@@ -67,7 +67,7 @@ function wpw_display_wheel() {
             <p class="wpw-description">Remises privées, cadeaux surprises ou avantages spéciaux… laissez le hasard vous récompenser.</p>
             <div class="wpw-actions">
                 <?php if ($has_played): ?>
-                    <p class="wpw-message"><?php esc_html_e('You already played today. Come back tomorrow!', 'wp-plugin-wheel'); ?></p>
+                    <p class="wpw-message"><?php esc_html_e('Vous avez déjà joué aujourd\'hui. Revenez demain !', 'wp-plugin-wheel'); ?></p>
                 <?php endif; ?>
                 <div class="wpw-buttons">
                     <button id="wp-wheel-spin"<?php echo $disabled; ?>>Tourner la roue</button>

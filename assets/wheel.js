@@ -233,14 +233,16 @@ document.addEventListener("DOMContentLoaded", function () {
             currentRotation = finalRotation;
 
             setTimeout(function () {
-                result.innerHTML = "<strong>" + escapeHtml(prizeName) + "</strong>";
+                result.innerHTML =
+                    '<span class="wpw-result-name">' + escapeHtml(prizeName) + '</span>' +
+                    (prizeDesc ? '<span class="wpw-result-desc">' + escapeHtml(prizeDesc) + '</span>' : '');
                 spinning = false;
                 launchConfetti();
                 openModal(prizeName, prizeDesc);
             }, 5200);
         })
         .catch(function () {
-            result.textContent = "Network error.";
+            result.textContent = "Erreur réseau.";
             spinning = false;
             btn.disabled = false;
         });
