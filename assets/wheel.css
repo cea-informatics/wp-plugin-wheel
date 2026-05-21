@@ -65,29 +65,25 @@
     font-weight: 700;
     letter-spacing: 0.4px;
     cursor: pointer;
-    background: #F67521;
+    background: #1a1a1a;
     color: #fff;
     border: none;
-    border-radius: 6px;
-    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-    box-shadow: 0 4px 16px rgba(246, 117, 33, 0.35);
+    border-radius: 0;
+    transition: background 0.2s;
+    box-shadow: none;
 }
 
 #wp-wheel-spin:hover:not(:disabled) {
-    background: #d95e10;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(246, 117, 33, 0.45);
+    background: #333;
 }
 
 #wp-wheel-spin:active:not(:disabled) {
-    transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(246, 117, 33, 0.3);
+    background: #000;
 }
 
 #wp-wheel-spin:disabled {
     opacity: 0.35;
     cursor: not-allowed;
-    box-shadow: none;
 }
 
 /* ─── Login button ───────────────────────────────────────────────── */
@@ -99,17 +95,16 @@
     font-weight: 700;
     letter-spacing: 0.4px;
     text-decoration: none;
-    color: #F67521;
+    color: #1a1a1a;
     background: transparent;
-    border: 2px solid #F67521;
-    border-radius: 6px;
-    transition: background 0.2s, color 0.2s, transform 0.15s;
+    border: 2px solid #1a1a1a;
+    border-radius: 0;
+    transition: background 0.2s, color 0.2s;
 }
 
 .wpw-login-btn:hover {
-    background: #F67521;
+    background: #1a1a1a;
     color: #fff;
-    transform: translateY(-2px);
 }
 
 /* ─── Messages & result ──────────────────────────────────────────── */
@@ -297,17 +292,16 @@
     font-size: 15px;
     font-weight: 700;
     cursor: pointer;
-    background: #F67521;
+    background: #1a1a1a;
     color: #fff;
     border: none;
-    border-radius: 8px;
-    transition: background 0.2s, transform 0.15s;
-    box-shadow: 0 4px 16px rgba(246, 117, 33, 0.35);
+    border-radius: 0;
+    transition: background 0.2s;
+    box-shadow: none;
 }
 
 .wpw-modal-close:hover {
-    background: #d95e10;
-    transform: translateY(-2px);
+    background: #333;
 }
 
 /* ─── Responsive ─────────────────────────────────────────────────── */
