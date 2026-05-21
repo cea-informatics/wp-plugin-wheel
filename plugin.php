@@ -55,10 +55,8 @@ function wpw_display_wheel() {
             <div class="wpw-modal-icon">🎉</div>
             <h3 class="wpw-modal-title">Félicitations&nbsp;!</h3>
             <p class="wpw-modal-subtitle">Vous avez gagné</p>
-            <div class="wpw-modal-prize-card">
-                <p class="wpw-modal-prize" id="wpw-modal-prize"></p>
-                <p class="wpw-modal-prize-desc" id="wpw-modal-prize-desc"></p>
-            </div>
+            <p class="wpw-modal-prize" id="wpw-modal-prize"></p>
+            <p class="wpw-modal-prize-desc" id="wpw-modal-prize-desc"></p>
             <button class="wpw-modal-close" id="wpw-modal-close">Super, merci&nbsp;!</button>
         </div>
     </div>
