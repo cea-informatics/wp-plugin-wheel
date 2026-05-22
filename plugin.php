@@ -24,6 +24,8 @@ require_once WPW_PLUGIN_DIR . 'includes/class-wpw-ajax.php';
 
 register_activation_hook(__FILE__, array('WPW_DB', 'install'));
 
+add_action('plugins_loaded', array('WPW_DB', 'maybe_migrate'));
+
 WPW_Admin::init();
 WPW_Ajax::init();
 

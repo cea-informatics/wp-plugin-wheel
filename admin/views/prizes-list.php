@@ -54,12 +54,13 @@
                         </td>
                         <td><?php echo esc_html($prize->probability); ?></td>
                         <td>
-                            <?php if ($prize->stock === null): ?>
+                            <?php $stock = property_exists($prize, 'stock') ? $prize->stock : null; ?>
+                            <?php if ($stock === null): ?>
                                 <span title="<?php esc_attr_e('Unlimited', 'wp-plugin-wheel'); ?>">∞</span>
-                            <?php elseif ((int) $prize->stock === 0): ?>
+                            <?php elseif ((int) $stock === 0): ?>
                                 <span style="color:#d63638;"><?php esc_html_e('Out of stock', 'wp-plugin-wheel'); ?></span>
                             <?php else: ?>
-                                <?php echo esc_html($prize->stock); ?>
+                                <?php echo esc_html($stock); ?>
                             <?php endif; ?>
                         </td>
                         <td><?php echo $prize->active ? esc_html__('Yes', 'wp-plugin-wheel') : esc_html__('No', 'wp-plugin-wheel'); ?></td>

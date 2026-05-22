@@ -39,7 +39,7 @@ class WPW_DB {
         self::maybe_migrate();
     }
 
-    private static function maybe_migrate() {
+    public static function maybe_migrate() {
         global $wpdb;
 
         if (version_compare(get_option('wpw_db_version', '1.0'), '2.0', '>=')) {
