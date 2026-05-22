@@ -42,6 +42,16 @@
             </tr>
             <tr>
                 <th scope="row">
+                    <label for="stock"><?php esc_html_e('Stock', 'wp-plugin-wheel'); ?></label>
+                </th>
+                <td>
+                    <input type="number" id="stock" name="stock" min="0" class="small-text"
+                           value="<?php echo ($prize && $prize->stock !== null) ? esc_attr($prize->stock) : ''; ?>">
+                    <p class="description"><?php esc_html_e('Leave empty for unlimited stock. Set to 0 to temporarily disable this prize.', 'wp-plugin-wheel'); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
                     <label for="image_url"><?php esc_html_e('Image URL', 'wp-plugin-wheel'); ?></label>
                 </th>
                 <td>

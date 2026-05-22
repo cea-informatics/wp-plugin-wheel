@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var btn = document.getElementById("wp-wheel-spin");
     var result = document.getElementById("wpw-result");
     var canvas = document.getElementById("wpw-canvas");
+    var attemptsLeft = document.getElementById("wpw-attempts-left");
 
     if (!wheel || !btn || !canvas) return;
 
@@ -11,9 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (count === 0) return;
 
-    // Two-tone alternating palette — orange and cream.
     var palette = ["#F67521", "#FCF6F0"];
-    // Segment border/separator color.
     var separatorColor = "rgba(255, 255, 255, 0.8)";
 
     var segmentAngle = 360 / count;
@@ -25,56 +24,46 @@ document.addEventListener("DOMContentLoaded", function () {
     var center = size / 2;
     var radius = size / 2;
 
-    // Draw a gift box icon (outline style).
     function drawGift(cx, cy, s, color) {
         ctx.strokeStyle = color;
         ctx.lineWidth = 1.8;
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
-        // Body
         ctx.beginPath();
         ctx.rect(cx - s * 0.5, cy - s * 0.1, s, s * 0.65);
         ctx.stroke();
-        // Lid
         ctx.beginPath();
         ctx.rect(cx - s * 0.55, cy - s * 0.35, s * 1.1, s * 0.25);
         ctx.stroke();
-        // Ribbon vertical
         ctx.beginPath();
         ctx.moveTo(cx, cy - s * 0.35);
         ctx.lineTo(cx, cy + s * 0.55);
         ctx.stroke();
-        // Left bow
         ctx.beginPath();
         ctx.moveTo(cx, cy - s * 0.22);
         ctx.bezierCurveTo(cx - s * 0.18, cy - s * 0.68, cx - s * 0.62, cy - s * 0.3, cx, cy - s * 0.22);
         ctx.stroke();
-        // Right bow
         ctx.beginPath();
         ctx.moveTo(cx, cy - s * 0.22);
         ctx.bezierCurveTo(cx + s * 0.18, cy - s * 0.68, cx + s * 0.62, cy - s * 0.3, cx, cy - s * 0.22);
         ctx.stroke();
     }
 
-    // Draw a shopping cart icon (outline style).
     function drawCart(cx, cy, s, color) {
         ctx.strokeStyle = color;
         ctx.lineWidth = 1.8;
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
-        // Handle
         ctx.beginPath();
         ctx.moveTo(cx - s * 0.8, cy - s * 0.42);
         ctx.lineTo(cx - s * 0.42, cy - s * 0.42);
         ctx.stroke();
-        // Basket
         ctx.beginPath();
         ctx.moveTo(cx - s * 0.42, cy - s * 0.42);
         ctx.lineTo(cx - s * 0.55, cy + s * 0.22);
         ctx.lineTo(cx + s * 0.55, cy + s * 0.22);
         ctx.lineTo(cx + s * 0.42, cy - s * 0.42);
         ctx.stroke();
-        // Wheels
         ctx.beginPath();
         ctx.arc(cx - s * 0.28, cy + s * 0.48, s * 0.14, 0, Math.PI * 2);
         ctx.stroke();
@@ -83,21 +72,17 @@ document.addEventListener("DOMContentLoaded", function () {
         ctx.stroke();
     }
 
-    // Draw a medal/badge icon (outline style).
     function drawMedal(cx, cy, s, color) {
         ctx.strokeStyle = color;
         ctx.lineWidth = 1.8;
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
-        // Outer circle
         ctx.beginPath();
         ctx.arc(cx, cy - s * 0.12, s * 0.5, 0, Math.PI * 2);
         ctx.stroke();
-        // Inner circle
         ctx.beginPath();
         ctx.arc(cx, cy - s * 0.12, s * 0.22, 0, Math.PI * 2);
         ctx.stroke();
-        // Ribbon tails
         ctx.beginPath();
         ctx.moveTo(cx - s * 0.18, cy + s * 0.38);
         ctx.lineTo(cx - s * 0.18, cy + s * 0.72);
@@ -114,7 +99,6 @@ document.addEventListener("DOMContentLoaded", function () {
         var endAngle = (segmentAngle * (i + 1) - 90) * (Math.PI / 180);
         var fillColor = palette[i % palette.length];
 
-        // Segment fill.
         ctx.beginPath();
         ctx.moveTo(center, center);
         ctx.arc(center, center, radius, startAngle, endAngle);
@@ -122,7 +106,6 @@ document.addEventListener("DOMContentLoaded", function () {
         ctx.fillStyle = fillColor;
         ctx.fill();
 
-        // Separator line.
         ctx.beginPath();
         ctx.moveTo(center, center);
         ctx.lineTo(
@@ -133,35 +116,53 @@ document.addEventListener("DOMContentLoaded", function () {
         ctx.lineWidth = 2;
         ctx.stroke();
 
-        // Icon position — centered in segment.
         var iconAngle = (startAngle + endAngle) / 2;
         var iconRadius = radius * 0.62;
         var ix = center + Math.cos(iconAngle) * iconRadius;
         var iy = center + Math.sin(iconAngle) * iconRadius;
 
-        var iconColor = i % 2 === 0
-            ? "#ffffff"
-            : "#7D5B3B";
-
+        var iconColor = i % 2 === 0 ? "#ffffff" : "#7D5B3B";
         iconDrawers[i % iconDrawers.length](ix, iy, 16, iconColor);
     }
 
     var spinning = false;
     var currentRotation = 0;
+    var pendingRemaining = 0;
 
     var modal = document.getElementById("wpw-modal");
+    var modalIcon = document.getElementById("wpw-modal-icon");
+    var modalTitle = document.getElementById("wpw-modal-title");
+    var modalSubtitle = document.getElementById("wpw-modal-subtitle");
     var modalPrize = document.getElementById("wpw-modal-prize");
     var modalPrizeDesc = document.getElementById("wpw-modal-prize-desc");
     var modalClose = document.getElementById("wpw-modal-close");
     var modalBackdrop = modal ? modal.querySelector(".wpw-modal-backdrop") : null;
 
-    function openModal(prizeName, prizeDesc) {
+    function openModal(won, prizeName, prizeDesc) {
         if (!modal) return;
-        modalPrize.textContent = prizeName;
-        if (modalPrizeDesc) {
-            modalPrizeDesc.textContent = prizeDesc || "";
-            modalPrizeDesc.style.display = prizeDesc ? "" : "none";
+
+        if (won) {
+            if (modalIcon) modalIcon.textContent = "🎉";
+            if (modalTitle) modalTitle.textContent = "Félicitations !";
+            if (modalSubtitle) modalSubtitle.textContent = "Vous avez gagné";
+            if (modalPrize) modalPrize.textContent = prizeName;
+            if (modalPrizeDesc) {
+                modalPrizeDesc.textContent = prizeDesc || "";
+                modalPrizeDesc.style.display = prizeDesc ? "" : "none";
+            }
+            if (modalClose) modalClose.textContent = "Super, merci !";
+        } else {
+            if (modalIcon) modalIcon.textContent = "😔";
+            if (modalTitle) modalTitle.textContent = "Dommage !";
+            if (modalSubtitle) modalSubtitle.textContent = "Vous n'avez pas gagné cette fois.";
+            if (modalPrize) modalPrize.textContent = "";
+            if (modalPrizeDesc) {
+                modalPrizeDesc.textContent = "";
+                modalPrizeDesc.style.display = "none";
+            }
+            if (modalClose) modalClose.textContent = pendingRemaining > 0 ? "Réessayer" : "Fermer";
         }
+
         modal.setAttribute("aria-hidden", "false");
         modal.classList.add("wpw-modal--open");
     }
@@ -170,6 +171,22 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!modal) return;
         modal.setAttribute("aria-hidden", "true");
         modal.classList.remove("wpw-modal--open");
+        if (pendingRemaining > 0) {
+            btn.disabled = false;
+            updateAttemptsText(pendingRemaining);
+        }
+        pendingRemaining = 0;
+    }
+
+    function updateAttemptsText(remaining) {
+        if (!attemptsLeft) return;
+        if (remaining === 1) {
+            attemptsLeft.textContent = "Il vous reste 1 tentative aujourd'hui.";
+        } else if (remaining > 1) {
+            attemptsLeft.textContent = "Il vous reste " + remaining + " tentatives aujourd'hui.";
+        } else {
+            attemptsLeft.textContent = "";
+        }
     }
 
     if (modalClose) modalClose.addEventListener("click", closeModal);
@@ -220,9 +237,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            var index = data.data.index;
-            var prizeName = data.data.prize.name;
-            var prizeDesc = data.data.prize.description || "";
+            var won       = data.data.won;
+            var index     = data.data.index;
+            var remaining = data.data.remaining_attempts;
+            var prizeName = won && data.data.prize ? data.data.prize.name : "";
+            var prizeDesc = won && data.data.prize ? (data.data.prize.description || "") : "";
 
             var targetAngle = 360 - (segmentAngle * index + segmentAngle / 2);
             var fullSpins = 360 * 10;
@@ -233,12 +252,19 @@ document.addEventListener("DOMContentLoaded", function () {
             currentRotation = finalRotation;
 
             setTimeout(function () {
-                result.innerHTML =
-                    '<span class="wpw-result-name">' + escapeHtml(prizeName) + '</span>' +
-                    (prizeDesc ? '<span class="wpw-result-desc">' + escapeHtml(prizeDesc) + '</span>' : '');
                 spinning = false;
-                launchConfetti();
-                openModal(prizeName, prizeDesc);
+                pendingRemaining = remaining;
+
+                if (won) {
+                    result.innerHTML =
+                        '<span class="wpw-result-name">' + escapeHtml(prizeName) + '</span>' +
+                        (prizeDesc ? '<span class="wpw-result-desc">' + escapeHtml(prizeDesc) + '</span>' : '');
+                    launchConfetti();
+                } else {
+                    result.innerHTML = '<span class="wpw-result-lost">Pas de chance cette fois !</span>';
+                }
+
+                openModal(won, prizeName, prizeDesc);
             }, 5200);
         })
         .catch(function () {

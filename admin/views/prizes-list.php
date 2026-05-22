@@ -30,6 +30,7 @@
                 <th><?php esc_html_e('ID', 'wp-plugin-wheel'); ?></th>
                 <th><?php esc_html_e('Name', 'wp-plugin-wheel'); ?></th>
                 <th><?php esc_html_e('Probability', 'wp-plugin-wheel'); ?></th>
+                <th><?php esc_html_e('Stock', 'wp-plugin-wheel'); ?></th>
                 <th><?php esc_html_e('Active', 'wp-plugin-wheel'); ?></th>
                 <th><?php esc_html_e('Created', 'wp-plugin-wheel'); ?></th>
                 <th><?php esc_html_e('Actions', 'wp-plugin-wheel'); ?></th>
@@ -38,7 +39,7 @@
         <tbody>
             <?php if (empty($prizes)): ?>
                 <tr>
-                    <td colspan="6"><?php esc_html_e('No prizes found.', 'wp-plugin-wheel'); ?></td>
+                    <td colspan="7"><?php esc_html_e('No prizes found.', 'wp-plugin-wheel'); ?></td>
                 </tr>
             <?php else: ?>
                 <?php foreach ($prizes as $prize): ?>
@@ -52,6 +53,15 @@
                             </strong>
                         </td>
                         <td><?php echo esc_html($prize->probability); ?></td>
+                        <td>
+                            <?php if ($prize->stock === null): ?>
+                                <span title="<?php esc_attr_e('Unlimited', 'wp-plugin-wheel'); ?>">∞</span>
+                            <?php elseif ((int) $prize->stock === 0): ?>
+                                <span style="color:#d63638;"><?php esc_html_e('Out of stock', 'wp-plugin-wheel'); ?></span>
+                            <?php else: ?>
+                                <?php echo esc_html($prize->stock); ?>
+                            <?php endif; ?>
+                        </td>
                         <td><?php echo $prize->active ? esc_html__('Yes', 'wp-plugin-wheel') : esc_html__('No', 'wp-plugin-wheel'); ?></td>
                         <td><?php echo esc_html($prize->created_at); ?></td>
                         <td>

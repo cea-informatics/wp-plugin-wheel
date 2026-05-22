@@ -12,6 +12,7 @@
             <tr>
                 <th><?php esc_html_e('ID', 'wp-plugin-wheel'); ?></th>
                 <th><?php esc_html_e('User', 'wp-plugin-wheel'); ?></th>
+                <th><?php esc_html_e('Result', 'wp-plugin-wheel'); ?></th>
                 <th><?php esc_html_e('Prize Won', 'wp-plugin-wheel'); ?></th>
                 <th><?php esc_html_e('Date', 'wp-plugin-wheel'); ?></th>
                 <th><?php esc_html_e('Time', 'wp-plugin-wheel'); ?></th>
@@ -21,14 +22,27 @@
         <tbody>
             <?php if (empty($participations)): ?>
                 <tr>
-                    <td colspan="6"><?php esc_html_e('No participations found.', 'wp-plugin-wheel'); ?></td>
+                    <td colspan="7"><?php esc_html_e('No participations found.', 'wp-plugin-wheel'); ?></td>
                 </tr>
             <?php else: ?>
                 <?php foreach ($participations as $p): ?>
                     <tr>
                         <td><?php echo esc_html($p->id); ?></td>
                         <td><?php echo esc_html($p->user_name ? $p->user_name : __('Deleted user', 'wp-plugin-wheel')); ?></td>
-                        <td><?php echo esc_html($p->prize_name ? $p->prize_name : __('Deleted prize', 'wp-plugin-wheel')); ?></td>
+                        <td>
+                            <?php if ($p->won): ?>
+                                <span style="color:#00a32a;font-weight:600;"><?php esc_html_e('Won', 'wp-plugin-wheel'); ?></span>
+                            <?php else: ?>
+                                <span style="color:#d63638;font-weight:600;"><?php esc_html_e('Lost', 'wp-plugin-wheel'); ?></span>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <?php if ($p->won): ?>
+                                <?php echo esc_html($p->prize_name ? $p->prize_name : __('Deleted prize', 'wp-plugin-wheel')); ?>
+                            <?php else: ?>
+                                —
+                            <?php endif; ?>
+                        </td>
                         <td><?php echo esc_html($p->participation_date); ?></td>
                         <td><?php echo esc_html($p->participated_at); ?></td>
                         <td>

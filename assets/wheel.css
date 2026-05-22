@@ -133,6 +133,18 @@
     color: #555;
 }
 
+.wpw-result-lost {
+    font-size: 18px;
+    font-weight: 700;
+    color: #888;
+}
+
+.wpw-attempts {
+    color: #888;
+    font-size: 14px;
+    margin: 0;
+}
+
 /* ─── Right column : wheel ───────────────────────────────────────── */
 #wpw-wheel-wrapper {
     position: relative;

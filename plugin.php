@@ -3,7 +3,7 @@
 /**
  * Plugin Name:     Custom Wheel
  * Description:     The plugin adds an interactive spinning wheel with prize management.
- * Version:         2.3.3
+ * Version:         2.4.0
  * Author:          CEA Informatics
  * License:         GPL-2.0-or-later
  * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
@@ -14,7 +14,7 @@
 
 if (!defined('ABSPATH')) exit;
 
-define('WPW_VERSION', '2.0.0');
+define('WPW_VERSION', '2.4.0');
 define('WPW_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WPW_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -34,8 +34,11 @@ function wpw_display_wheel() {
         return '<p>' . esc_html__('La roue n\'est pas encore configurée.', 'wp-plugin-wheel') . '</p>';
     }
 
-    $is_logged_in = is_user_logged_in();
-    $has_played = $is_logged_in && WPW_DB::has_participated_today(get_current_user_id());
+    $is_logged_in   = is_user_logged_in();
+    $max_attempts   = (int) get_option('wpw_daily_attempts', 2);
+    $attempts_today = $is_logged_in ? WPW_DB::count_today_attempts(get_current_user_id()) : 0;
+    $remaining      = max(0, $max_attempts - $attempts_today);
+    $has_played_max = ($attempts_today >= $max_attempts);
 
     $prizes_data = array();
     foreach ($prizes as $prize) {
@@ -46,15 +49,15 @@ function wpw_display_wheel() {
         );
     }
 
-    $disabled = (!$is_logged_in || $has_played) ? ' disabled' : '';
+    $disabled = (!$is_logged_in || $has_played_max) ? ' disabled' : '';
 
     ob_start(); ?>
     <div id="wpw-modal" class="wpw-modal" aria-hidden="true">
         <div class="wpw-modal-backdrop"></div>
         <div class="wpw-modal-box" role="dialog" aria-modal="true">
-            <div class="wpw-modal-icon">🎉</div>
-            <h3 class="wpw-modal-title">Félicitations&nbsp;!</h3>
-            <p class="wpw-modal-subtitle">Vous avez gagné</p>
+            <div class="wpw-modal-icon" id="wpw-modal-icon">🎉</div>
+            <h3 class="wpw-modal-title" id="wpw-modal-title">Félicitations&nbsp;!</h3>
+            <p class="wpw-modal-subtitle" id="wpw-modal-subtitle">Vous avez gagné</p>
             <p class="wpw-modal-prize" id="wpw-modal-prize"></p>
             <p class="wpw-modal-prize-desc" id="wpw-modal-prize-desc"></p>
             <button class="wpw-modal-close" id="wpw-modal-close">Super, merci&nbsp;!</button>
@@ -66,8 +69,16 @@ function wpw_display_wheel() {
             <p class="wpw-description">Faites tourner notre roulette et débloquez une offre réservée à nos visiteurs.</p>
             <p class="wpw-description">Remises privées, cadeaux surprises ou avantages spéciaux… laissez le hasard vous récompenser.</p>
             <div class="wpw-actions">
-                <?php if ($has_played): ?>
-                    <p class="wpw-message"><?php esc_html_e('Vous avez déjà joué aujourd\'hui. Revenez demain !', 'wp-plugin-wheel'); ?></p>
+                <?php if ($has_played_max && $is_logged_in): ?>
+                    <p class="wpw-message"><?php printf(
+                        esc_html__('Vous avez utilisé vos %d tentatives pour aujourd\'hui. Revenez demain !', 'wp-plugin-wheel'),
+                        $max_attempts
+                    ); ?></p>
+                <?php elseif ($is_logged_in && $remaining < $max_attempts): ?>
+                    <p class="wpw-attempts" id="wpw-attempts-left"><?php printf(
+                        esc_html(_n('Il vous reste %d tentative aujourd\'hui.', 'Il vous reste %d tentatives aujourd\'hui.', $remaining, 'wp-plugin-wheel')),
+                        $remaining
+                    ); ?></p>
                 <?php endif; ?>
                 <div class="wpw-buttons">
                     <button id="wp-wheel-spin"<?php echo $disabled; ?>>Tourner la roue</button>

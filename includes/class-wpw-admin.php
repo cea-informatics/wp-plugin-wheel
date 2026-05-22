@@ -9,9 +9,6 @@ class WPW_Admin {
         add_action('admin_enqueue_scripts', array(__CLASS__, 'enqueue_assets'));
     }
 
-    /**
-     * Register admin menus.
-     */
     public static function register_menus() {
         add_menu_page(
             __('Custom Wheel', 'wp-plugin-wheel'),
@@ -40,11 +37,17 @@ class WPW_Admin {
             'wpw-participations',
             array(__CLASS__, 'page_participations')
         );
+
+        add_submenu_page(
+            'wpw-prizes',
+            __('Settings', 'wp-plugin-wheel'),
+            __('Settings', 'wp-plugin-wheel'),
+            'manage_options',
+            'wpw-settings',
+            array(__CLASS__, 'page_settings')
+        );
     }
 
-    /**
-     * Enqueue admin assets.
-     */
     public static function enqueue_assets($hook) {
         if (strpos($hook, 'wpw-') === false) {
             return;
@@ -53,9 +56,10 @@ class WPW_Admin {
         wp_enqueue_style('wpw-admin', WPW_PLUGIN_URL . 'assets/admin.css', array(), WPW_VERSION);
     }
 
-    /**
-     * Prizes page router.
-     */
+    /* -------------------------------------------------------------------------
+     * Prizes page
+     * ---------------------------------------------------------------------- */
+
     public static function page_prizes() {
         if (!current_user_can('manage_options')) {
             wp_die(__('Unauthorized access.', 'wp-plugin-wheel'));
@@ -63,13 +67,11 @@ class WPW_Admin {
 
         $action = isset($_GET['action']) ? sanitize_text_field($_GET['action']) : 'list';
 
-        // Handle form submissions.
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             self::handle_prize_save();
             return;
         }
 
-        // Handle delete action.
         if ($action === 'delete' && isset($_GET['id'])) {
             self::handle_prize_delete();
             return;
@@ -87,9 +89,6 @@ class WPW_Admin {
         }
     }
 
-    /**
-     * Handle prize save (insert/update).
-     */
     private static function handle_prize_save() {
         if (!check_admin_referer('wpw_save_prize', 'wpw_nonce')) {
             wp_die(__('Invalid nonce.', 'wp-plugin-wheel'));
@@ -99,6 +98,7 @@ class WPW_Admin {
             'name'        => isset($_POST['name']) ? $_POST['name'] : '',
             'description' => isset($_POST['description']) ? $_POST['description'] : '',
             'probability' => isset($_POST['probability']) ? $_POST['probability'] : 1,
+            'stock'       => isset($_POST['stock']) ? $_POST['stock'] : '',
             'image_url'   => isset($_POST['image_url']) ? $_POST['image_url'] : '',
             'active'      => isset($_POST['active']) ? 1 : 0,
         );
@@ -115,9 +115,6 @@ class WPW_Admin {
         exit;
     }
 
-    /**
-     * Handle prize deletion.
-     */
     private static function handle_prize_delete() {
         if (!isset($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'wpw_delete_prize_' . absint($_GET['id']))) {
             wp_die(__('Invalid nonce.', 'wp-plugin-wheel'));
@@ -129,15 +126,15 @@ class WPW_Admin {
         exit;
     }
 
-    /**
-     * Participations page.
-     */
+    /* -------------------------------------------------------------------------
+     * Participations page
+     * ---------------------------------------------------------------------- */
+
     public static function page_participations() {
         if (!current_user_can('manage_options')) {
             wp_die(__('Unauthorized access.', 'wp-plugin-wheel'));
         }
 
-        // Handle delete action.
         if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
             $id = absint($_GET['id']);
             if (!isset($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'wpw_delete_participation_' . $id)) {
@@ -148,16 +145,44 @@ class WPW_Admin {
             exit;
         }
 
-        $per_page = 20;
+        $per_page    = 20;
         $current_page = isset($_GET['paged']) ? max(1, absint($_GET['paged'])) : 1;
-        $offset = ($current_page - 1) * $per_page;
+        $offset      = ($current_page - 1) * $per_page;
 
         $participations = WPW_DB::get_participations($per_page, $offset);
-        $total = WPW_DB::count_participations();
-        $total_pages = ceil($total / $per_page);
-
-        $deleted = isset($_GET['message']) && $_GET['message'] === 'deleted';
+        $total          = WPW_DB::count_participations();
+        $total_pages    = ceil($total / $per_page);
+        $deleted        = isset($_GET['message']) && $_GET['message'] === 'deleted';
 
         include WPW_PLUGIN_DIR . 'admin/views/participations-list.php';
+    }
+
+    /* -------------------------------------------------------------------------
+     * Settings page
+     * ---------------------------------------------------------------------- */
+
+    public static function page_settings() {
+        if (!current_user_can('manage_options')) {
+            wp_die(__('Unauthorized access.', 'wp-plugin-wheel'));
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!check_admin_referer('wpw_save_settings', 'wpw_nonce')) {
+                wp_die(__('Invalid nonce.', 'wp-plugin-wheel'));
+            }
+
+            update_option('wpw_daily_limit',       max(1, absint($_POST['daily_limit'])));
+            update_option('wpw_daily_attempts',    max(1, absint($_POST['daily_attempts'])));
+            update_option('wpw_lose_probability',  absint($_POST['lose_probability']));
+
+            wp_redirect(admin_url('admin.php?page=wpw-settings&message=saved'));
+            exit;
+        }
+
+        $daily_limit      = (int) get_option('wpw_daily_limit', 10);
+        $daily_attempts   = (int) get_option('wpw_daily_attempts', 2);
+        $lose_probability = (int) get_option('wpw_lose_probability', 0);
+
+        include WPW_PLUGIN_DIR . 'admin/views/settings.php';
     }
 }
